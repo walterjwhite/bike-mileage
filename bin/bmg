@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. _LIBRARY_PATH/_APPLICATION_NAME/include.sh
+. _LIBRARY_PATH_/_APPLICATION_NAME_/include.sh
 
 _append() {
     if [ -n "$_MATCH" ]
@@ -60,7 +60,7 @@ _FILTER=$(mktemp)
 echo "$_MATCH {$_GROUP_BUCKET} END {$_GROUP_PRINT}" > $_FILTER
 
 awk -F',' -f $_FILTER -v units="$_UNITS"\
-    $(find $_PROJECT -type f | grep \\.csv$)\
+    $(find $_PROJECT_PATH -type f | grep \\.csv$)\
     | sort
 
 rm -f $_FILTER

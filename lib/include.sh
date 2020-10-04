@@ -1,18 +1,19 @@
 #!/bin/sh
 
-. _LIBRARY_PATH/git-helpers/include.sh
+. _LIBRARY_PATH_/git/include.sh
+. _LIBRARY_PATH_/install/logging.sh
 
-_BIKE_MILEAGE=bike.ride
-_PROJECT=$_PROJECT_BASE_PATH/$_BIKE_MILEAGE
+_PROJECT_PATH=_APPLICATION_DATA_PATH_
+_PROJECT=data/_APPLICATION_NAME_
+
+_git_init
 
 # checks if the entry already exists
 # NOTE: if we enter the date differently, it'll be entered twice
 _exists() {
-    local _matches=$(grep -c "^$_DATE,$_INDEX,$_BIKE" $_FILE)
-    if [ "$_matches" -gt "0" ]
+    if [ "$(grep -c "^$_DATE,$_INDEX,$_BIKE" $_FILE)" -gt "0" ]
     then
-        echo "Entry already exists, please double-check: $_DATE,$_INDEX,$_BIKE - $_FILE"
-        exit 2
+        exitWithError "Entry already exists, please double-check: $_DATE,$_INDEX,$_BIKE - $_FILE" 2
     fi
 }
 
@@ -20,7 +21,7 @@ _file() {
     _YEAR=$(echo $_DATE | cut -f 1 -d '/')
     _decade
 
-    _FILE=$_PROJECT/$_DECADE/$_YEAR.csv
+    _FILE=$_PROJECT_PATH/$_DECADE/$_YEAR.csv
 }
 
 # @see: /usr/local/sbin/zfs-media-backup

@@ -1,13 +1,13 @@
 #!/bin/sh
 
-. _LIBRARY_PATH/_APPLICATION_NAME/include.sh
+. _LIBRARY_PATH_/_APPLICATION_NAME_/include.sh
+. _LIBRARY_PATH_/install/logging.sh
 
 # check arguments
 # assume user is able to enter arguments in proper format (date, bike, index, mileage, tags)
 if [ "$#" -lt "4" ]
 then
-    echo "Date, Index, Bike, and Distance are required (tags are optional)"
-    exit 1
+    exitWithError "Date, Index, Bike, and Distance are required (tags are optional)" 1
 fi
 
 _DATE=$1
