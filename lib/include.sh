@@ -1,7 +1,6 @@
 #!/bin/sh
 
 . _LIBRARY_PATH_/git/include.sh
-. _LIBRARY_PATH_/install/logging.sh
 
 _PROJECT_PATH=_APPLICATION_DATA_PATH_
 _PROJECT=data/_APPLICATION_NAME_
