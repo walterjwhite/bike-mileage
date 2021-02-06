@@ -4,9 +4,8 @@
 
 # check arguments
 # assume user is able to enter arguments in proper format (date, bike, index, mileage, tags)
-if [ "$#" -lt "4" ]
-then
-    exitWithError "Date, Index, Bike, and Distance are required (tags are optional)" 1
+if [ "$#" -lt "4" ]; then
+	exitWithError "Date, Index, Bike, and Distance are required (tags are optional)" 1
 fi
 
 _DATE=$1
@@ -19,7 +18,7 @@ _file
 _exists
 
 # update mileage
-echo "$_DATE,$_INDEX,$_BIKE,$_MILEAGE,$_TAGS" >> $_FILE
+echo "$_DATE,$_INDEX,$_BIKE,$_MILEAGE,$_TAGS" >>$_FILE
 
 # commit and push
 _git $_FILE "add - $_DECADE/$_DATE,$_INDEX,$_BIKE"

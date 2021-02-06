@@ -1,0 +1,11 @@
+bmg
+    -b=bike
+
+    -s=start
+        -s=2019/01/01
+
+    -e=end
+        -e=2019/12/31
+    
+    -g=group (bike / year / month / day)
+        -g=bike

@@ -3,12 +3,11 @@
 . _LIBRARY_PATH_/_APPLICATION_NAME_/include.sh
 
 _append() {
-    if [ -n "$_MATCH" ]
-    then
-        _MATCH="$_MATCH && \$$1$2"
-    else
-        _MATCH="\$$1$2"
-    fi
+	if [ -n "$_MATCH" ]; then
+		_MATCH="$_MATCH && \$$1$2"
+	else
+		_MATCH="\$$1$2"
+	fi
 }
 
 _AGGREGATION=sum
@@ -21,46 +20,45 @@ _UNITS=miles
 _GROUP_BUCKET="sum += \$4; n++"
 _GROUP_PRINT="print $_AGGREGATION\" \"units"
 
-for _ARG in $@
-do
-    case $_ARG in
-        -b=*)
-            _append 3 "==\"${_ARG#*=}\""
-            
-            ;;
-        -s=*)
-            _append 1 ">=${_ARG#*=}"
-            ;;
-        -e=*)
-            _append 1 "<=${_ARG#*=}"
-            ;;
-        -g=*)
-            case "${_ARG#*=}" in
-                bike)
-                    _GROUP_BUCKET="bucket = \$3;A[bucket] = A[bucket] + \$4;"
-                    
-                    ;;
-                year)
-                    _GROUP_BUCKET="bucket = substr(\$1, 1, 4);A[bucket] = A[bucket] + \$4;"
-                    ;;
-                month)
-                    _GROUP_BUCKET="bucket = substr(\$1, 1, 7);A[bucket] = A[bucket] + \$4;"
-                    ;;
-                day)
-                    _GROUP_BUCKET="bucket = substr(\$1, 1, 7);A[bucket] = A[bucket] + \$4;"
-                    ;;
-            esac
+for _ARG in $@; do
+	case $_ARG in
+	-b=*)
+		_append 3 "==\"${_ARG#*=}\""
 
-            _GROUP_PRINT="for (i in A) {print i, A[i];}"
-            ;;
-    esac
+		;;
+	-s=*)
+		_append 1 ">=${_ARG#*=}"
+		;;
+	-e=*)
+		_append 1 "<=${_ARG#*=}"
+		;;
+	-g=*)
+		case "${_ARG#*=}" in
+		bike)
+			_GROUP_BUCKET="bucket = \$3;A[bucket] = A[bucket] + \$4;"
+
+			;;
+		year)
+			_GROUP_BUCKET="bucket = substr(\$1, 1, 4);A[bucket] = A[bucket] + \$4;"
+			;;
+		month)
+			_GROUP_BUCKET="bucket = substr(\$1, 1, 7);A[bucket] = A[bucket] + \$4;"
+			;;
+		day)
+			_GROUP_BUCKET="bucket = substr(\$1, 1, 7);A[bucket] = A[bucket] + \$4;"
+			;;
+		esac
+
+		_GROUP_PRINT="for (i in A) {print i, A[i];}"
+		;;
+	esac
 done
 
 _FILTER=$(mktemp)
-echo "$_MATCH {$_GROUP_BUCKET} END {$_GROUP_PRINT}" > $_FILTER
+echo "$_MATCH {$_GROUP_BUCKET} END {$_GROUP_PRINT}" >$_FILTER
 
-awk -F',' -f $_FILTER -v units="$_UNITS"\
-    $(find $_PROJECT_PATH -type f | grep \\.csv$)\
-    | sort
+awk -F',' -f $_FILTER -v units="$_UNITS" \
+	$(find $_PROJECT_PATH -type f | grep \\.csv$) |
+	sort
 
 rm -f $_FILTER
